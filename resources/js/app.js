@@ -29,4 +29,12 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    data:{
+        isHidden : true
+    },
+    methods: {
+        toggleNavbar: function() {
+            this.isHidden = !this.isHidden
+        }
+    },
 });
