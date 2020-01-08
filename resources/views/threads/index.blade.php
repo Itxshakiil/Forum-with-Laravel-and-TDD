@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Login to your account')
+@section('title','All Threads')
 @section('content')
 <div class="container mx-auto">
     <div class="flex justify-center px-6 my-12">

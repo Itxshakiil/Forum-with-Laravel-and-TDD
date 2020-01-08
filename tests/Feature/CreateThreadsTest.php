@@ -21,7 +21,16 @@ class CreateThreadsTest extends TestCase
 
         $thread = factory(Thread::class)->make();
 
-        $this->post('/threads',$thread->toArray());
+        $this->post('/threads', $thread->toArray());
+    }
+
+    /**
+    * @test
+    */
+    public function guests_cannot_see_the_create_form()
+    {
+        $this->withExceptionHandling()->get(route('threads.create'))
+            ->assertRedirect('/login');
     }
 
     /**
@@ -33,9 +42,9 @@ class CreateThreadsTest extends TestCase
 
         $thread = factory(Thread::class)->make();
 
-        $this->post('/threads',$thread->toArray());
+        $this->post('/threads', $thread->toArray());
 
-        $this->get('/threads/'.$thread->id)
+        $this->get('/threads/' . $thread->id)
         ->assertSee($thread->title)
         ->assertSee($thread->body);
     }
