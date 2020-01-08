@@ -9,8 +9,9 @@ class ThreadsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -41,16 +42,14 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-        return redirect('/threads/'.Thread::create([
+        $thread = Thread::create([
             'user_id' => auth()->id(),
+            'channel_id' => $request->channel_id,
             'title' => $request->title,
             'body' => $request->body,
-        ])->id);
-        // $data = $request->validate([
-        //     'title' => 'required',
-        //     'body' => 'required',
-        //     'user_id' => 'sometime'
-        // ]);
+        ]);
+
+        return redirect($thread->path());
     }
 
     /**
@@ -59,9 +58,9 @@ class ThreadsController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channelId, Thread $thread)
     {
-        return view('threads.show',compact('thread'));
+        return view('threads.show', compact('thread'));
     }
 
     /**

@@ -25,12 +25,14 @@
             </div>
             @auth
             <div class="border p-4 mb-2 rounded">
-                <form action="{{route('reply.store',['thread'=>$thread->id])}}" method="post">
+                <form action="{{route('reply.store',['thread'=>$thread->id,'channel'=>$thread->channel->slug])}}"
+                    method="post">
                     @csrf
                     <div class="mb-4">
                         <textarea
                             class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border  rounded shadow appearance-none focus:outline-none @error('body') border-red-500 @enderror"
-                            id="body" type="body" name="body" placeholder="Anything to say?" cols="30" rows="5"></textarea>
+                            id="body" type="body" name="body" placeholder="Anything to say?" cols="30"
+                            rows="5"></textarea>
                         @error('body')
                         <p class="text-xs italic text-red-500" role="alert">{{ $message }}</p>
                         @enderror
@@ -45,7 +47,8 @@
                 </form>
             </div>
             @else
-        <p class="p-4">Please <a href="{{route('login')}}" class="text-blue-500">sign in</a> to participate in the discussion</p>
+            <p class="p-4">Please <a href="{{route('login')}}" class="text-blue-500">sign in</a> to participate in the
+                discussion</p>
             @endauth
         </div>
     </div>

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Reply;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -33,7 +32,7 @@ class ReadThreadsTest extends TestCase
      */
     public function a_user_can_read_single_thread()
     {
-        $this->get('/threads/' . $this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($this->thread->body);
     }
 
@@ -43,15 +42,17 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_read_reply_associated_with_a_thread()
     {
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
-        $this->get('/threads/' . $this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($reply->body);
-    }/**
-     * @test
-     */
-    // public function a_user_has_an_owner(){
+    }
 
-    //     $reply = factory('App\Reply')->create();
+    /**
+    * @test
+    */
+    public function a_user_has_an_owner()
+    {
+        $reply = factory('App\Reply')->create();
 
-    //     $this->assertInstanceOf('App\User',$reply->owner,'No Owner Found');
-    // }
+        $this->assertInstanceOf('App\User', $reply->owner, 'No Owner Found');
+    }
 }

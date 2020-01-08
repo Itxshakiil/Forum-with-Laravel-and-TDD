@@ -8,11 +8,11 @@
 
             @foreach ($threads as $thread)
             <article class="border p-4 mb-2 rounded">
-                <a href="/threads/{{$thread->id}}" class="text 2xl text-blue-500">{{$thread->title}}</a>
+                <a href="{{$thread->path()}}" class="text 2xl text-blue-500">{{$thread->title}}</a>
                 <p class="p-2">{{$thread->body}}</p>
             </article>
             @endforeach
-            
+
         </div>
     </div>
 </div>
