@@ -30,6 +30,10 @@
                     </a>
                     <a class="nav-link mr-4" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
                     <a class="nav-link mr-4" href="{{ route('threads.create') }}">{{ __('Create Threads') }}</a>
+                    @auth
+                    <a class="nav-link mr-4"
+                        href="{{ route('threads.index') }}?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>
+                    @endauth
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

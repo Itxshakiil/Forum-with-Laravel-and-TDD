@@ -81,7 +81,26 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling()->actingAs(factory(User::class)->create());
         
         $thread = factory(Thread::class)->make($overrirdes);
-
+        
         return $this->post('/threads',$thread->toArray());
+    }
+    
+    /**
+     * @test
+     */
+    public function a_user_can_filter_thread_by_any_username()
+    {
+        $this->actingAs(factory(User::class)->create([
+            'name' => 'JohnDoe'
+        ]));
+
+        $threadByJohn = factory(Thread::class)->create([
+        'user_id' => auth()->id()
+        ]);
+        $threadNotByJohn =  factory(Thread::class)->create();
+    
+        $this->get('/threads?by=JohnDoe')
+        ->assertSee($threadByJohn->title)
+        ->assertDontSee($threadNotByJohn->title);
     }
 }
