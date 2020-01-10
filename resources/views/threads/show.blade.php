@@ -5,8 +5,8 @@
     <div class="flex justify-center px-6 my-12">
         <div class="flex flex-col w-full lg:w-1/2 bg-white p-5 rounded-lg lg:rounded-l-none">
             <div>
-                <a href="/threads" class="text 2xl text-blue-500">All threads</a>
-
+                <a href="/threads" class="text 2xl text-blue-500 mb-4 inline-block">All threads</a>
+                <a href="/threads/{{$thread->channel->slug}}" class="float-right text-sm py-1 px-2 rounded align-middle text-white bg-blue-500 hover:bg-blue-700 focus:outline-none hover:bg-blue-700 focus:outline-none">{{$thread->channel->slug}}</a>
                 <article class="border p-4 mb-2 rounded">
                     <h3 class="p-2">
                         <a href="#" class="text-blue-500">{{$thread->creator->name}}</a>

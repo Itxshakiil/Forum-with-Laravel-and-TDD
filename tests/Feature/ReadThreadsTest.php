@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Channel;
+use App\Thread;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -54,5 +56,24 @@ class ReadThreadsTest extends TestCase
         $reply = factory('App\Reply')->create();
 
         $this->assertInstanceOf('App\User', $reply->owner, 'No Owner Found');
+    }
+
+    /**
+    * @test
+    */
+    public function a_user_can_filter_threads_according_to_tag()
+    {
+        $channel = factory(Channel::class)->create();
+        $threadInChannel = factory(Thread::class, ['channel_id' => $channel->id])->create();
+        $threadNotInThread = factory(Thread::class)->create();
+        
+        $this->get("/threads/{$channel->slug}")
+        ->assertDontSee($threadNotInThread->title);
+
+        /* Because $threadNotInChannel is Collection */
+        foreach($threadInChannel as $channels){
+            $this->get("/threads/{$channel->slug}")
+            ->assertDontSee($channels->title);
+        }
     }
 }
