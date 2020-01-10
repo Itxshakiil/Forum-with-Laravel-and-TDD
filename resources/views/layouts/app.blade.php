@@ -24,10 +24,13 @@
     <div id="app">
         <nav class="bg-gray-300 text-gray-900">
             <div class="container justify-between flex p-4">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <a class="nav-link" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
+                <div>
+                    <a class="navbar-brand mr-4" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                    <a class="nav-link mr-4" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
+                    <a class="nav-link mr-4" href="{{ route('threads.create') }}">{{ __('Create Threads') }}</a>
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="{{ __('Toggle navigation') }}">

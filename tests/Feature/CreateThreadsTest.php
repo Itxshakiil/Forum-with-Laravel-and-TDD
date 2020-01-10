@@ -67,6 +67,7 @@ class CreateThreadsTest extends TestCase
     public function a_thread_requires_a_valid_channel()
     {
         factory(Channel::class,2)->create();
+        
         $this->publishThreads(['channel_id' => null])
         ->assertSessionHasErrors('channel_id');
     
@@ -79,7 +80,7 @@ class CreateThreadsTest extends TestCase
     {
         $this->withExceptionHandling()->actingAs(factory(User::class)->create());
         
-        $thread = factory(Thread::class,$overrirdes)->make();
+        $thread = factory(Thread::class)->make($overrirdes);
 
         return $this->post('/threads',$thread->toArray());
     }
