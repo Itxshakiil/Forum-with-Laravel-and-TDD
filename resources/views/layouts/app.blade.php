@@ -30,6 +30,7 @@
                     </a>
                     <a class="nav-link mr-4" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
                     <a class="nav-link mr-4" href="{{ route('threads.create') }}">{{ __('Create Threads') }}</a>
+                    <a class="nav-link mr-4" href="{{ route('threads.index') }}?popular=1">{{ __('Popular Threads') }}</a>
                     @auth
                     <a class="nav-link mr-4"
                         href="{{ route('threads.index') }}?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>

@@ -22,7 +22,9 @@ class ThreadsController extends Controller
     public function index(Channel $channel, ThreadFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
-
+        if (request()->wantsJson()) {
+            return $threads;
+        }
         return view('threads.index', compact('threads'));
     }
 
@@ -69,7 +71,7 @@ class ThreadsController extends Controller
     {
         $replies = $thread->replies()->paginate(12);
 
-        return view('threads.show',compact('thread','replies'));
+        return view('threads.show', compact('thread', 'replies'));
     }
 
     /**

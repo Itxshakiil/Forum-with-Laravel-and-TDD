@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Channel;
+use App\Reply;
 use App\Thread;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -75,5 +76,27 @@ class ReadThreadsTest extends TestCase
             $this->get("/threads/{$channel->slug}")
             ->assertDontSee($channels->title);
         }
+    }
+
+    /**
+    * @test
+    */
+    public function a_user_can_filter_thredas_by_popularity()
+    {
+        $threadWithNoReply = $this->thread;
+
+        $threadWithOneReply = factory(Thread::class)->create();
+        factory(Reply::class)->create([
+            'thread_id' => $threadWithOneReply->id
+        ]);
+
+        $threadWithThreeeReply = factory(Thread::class)->create();
+        factory(Reply::class,3)->create([
+            'thread_id' => $threadWithThreeeReply->id
+        ]);
+
+       $response= $this->getJson('/threads?popular=1')->json();
+
+        $this->assertEquals([3,1,0],array_column($response,'replies_count'));
     }
 }
