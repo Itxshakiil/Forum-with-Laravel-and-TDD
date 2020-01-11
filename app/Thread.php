@@ -12,6 +12,7 @@ class Thread extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $with = ['creator', 'channel'];
 
     protected static function boot()
     {

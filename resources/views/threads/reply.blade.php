@@ -6,7 +6,7 @@
             @csrf
             <button class="px-4 py-2 border rounded focus:outline-none" type="submit"
                 {{$reply->isFavorited() ? 'disabled' : ''}}>
-                {{$reply->favorites()->count()}} {{Str::plural('favorite',$reply->favorites()->count())}}
+                {{$reply->favorites_count}} {{Str::plural('favorite',$reply->favorites_count)}}
             </button>
         </form>
     </div>
