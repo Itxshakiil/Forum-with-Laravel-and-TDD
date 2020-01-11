@@ -17,12 +17,17 @@ abstract class TestCase extends BaseTestCase
         $this->disbaleExceptionHandling();
     }
 
-    protected function disbaleExceptionHandling(){
+    protected function disbaleExceptionHandling()
+    {
         $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
 
-        $this->app->instance(ExceptionHandler::class,new class extends Handler{
-            public function __construct(){}
-            public function report(\Exception $e){}
+        $this->app->instance(ExceptionHandler::class, new class extends Handler {
+            public function __construct()
+            {
+            }
+            public function report(\Exception $e)
+            {
+            }
             public function render($request, \Exception $exception)
             {
                 throw $exception;
@@ -32,7 +37,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function withExceptionHandling()
     {
-        $this->app->instance(ExceptionHandler::class,$this->oldExceptionHandler);
+        $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
         return $this;
     }
 }

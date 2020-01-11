@@ -48,7 +48,7 @@ class ParticipateInForumTest extends TestCase
 
         $thread = factory(Thread::class)->create();
 
-        $reply = factory(Reply::class,['body' => null])->make();
+        $reply = factory(Reply::class, ['body' => null])->make();
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
         ->assertSessionHasErrors('body');

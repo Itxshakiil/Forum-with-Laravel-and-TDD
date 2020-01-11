@@ -40,12 +40,12 @@ class RepliesController extends Controller
      * @param  \App\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId,Thread $thread)
+    public function store($channelId, Thread $thread)
     {
         request()->validate([
             'body' => ['required']
         ]);
-        
+
         $thread->addReply([
             'body' => request('body'),
             'user_id' => auth()->id()

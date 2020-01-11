@@ -72,7 +72,7 @@ class ReadThreadsTest extends TestCase
         ->assertDontSee($threadNotInThread->title);
 
         /* Because $threadNotInChannel is Collection */
-        foreach($threadInChannel as $channels){
+        foreach ($threadInChannel as $channels) {
             $this->get("/threads/{$channel->slug}")
             ->assertDontSee($channels->title);
         }
@@ -91,12 +91,12 @@ class ReadThreadsTest extends TestCase
         ]);
 
         $threadWithThreeeReply = factory(Thread::class)->create();
-        factory(Reply::class,3)->create([
+        factory(Reply::class, 3)->create([
             'thread_id' => $threadWithThreeeReply->id
         ]);
 
-       $response= $this->getJson('/threads?popular=1')->json();
+        $response= $this->getJson('/threads?popular=1')->json();
 
-        $this->assertEquals([3,1,0],array_column($response,'replies_count'));
+        $this->assertEquals([3,1,0], array_column($response, 'replies_count'));
     }
 }
