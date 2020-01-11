@@ -9,7 +9,7 @@
                 <a href="/threads/{{$thread->channel->slug}}" class="float-right text-sm py-1 px-2 rounded align-middle text-white bg-blue-500 hover:bg-blue-700 focus:outline-none hover:bg-blue-700 focus:outline-none">{{$thread->channel->slug}}</a>
                 <article class="border p-4 mb-2 rounded">
                     <h3 class="p-2">
-                        <a href="#" class="text-blue-500">{{$thread->creator->name}}</a>
+                    <a href="{{route('profile.show',$thread->creator->name)}}" class="text-blue-500">{{$thread->creator->name}}</a>
                         posted: {{$thread->title}}
                     </h3>
                     <p class="p-2">{{$thread->body}}</p>

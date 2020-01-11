@@ -1,6 +1,6 @@
 <article class="border p-4 mb-2 rounded">
     <div class="flex">
-        <p class="text-sm flex-1"><a href="#" class="text-blue-500">{{$reply->owner->name }}</a> said
+        <p class="text-sm flex-1"><a href="{{route('profile.show',$reply->owner->name)}}" class="text-blue-500">{{$reply->owner->name }}</a> said
             {{$reply->created_at->diffForHumans()}} ...</p>
         <form action="{{route('reply.favorite',['reply'=>$reply->id])}}" method="post">
             @csrf
