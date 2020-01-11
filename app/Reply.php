@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Reply extends Model
 {
@@ -35,5 +36,13 @@ class Reply extends Model
         if (!$this->favorites()->where($attributes)->exists()) {
             return $this->favorites()->create($attributes);
         }
+    }
+
+    public function isFavorited()
+    {
+        if(Auth::check()){
+            return $this->favorites()->where(['user_id' => auth()->user()->id])->exists();
+        }
+        return false;
     }
 }
