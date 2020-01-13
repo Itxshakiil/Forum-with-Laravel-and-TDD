@@ -17,22 +17,23 @@ class ProfilesTest extends TestCase
     public function a_user_has_a_profile()
     {
         $user = factory(User::class)->create();
-        
+
         $this->get("/profiles/{$user->name}")
         ->assertSee($user->name);
     }
+
     /**
      * @test
      */
     public function profile_displays_all_threads_created_by_associated_user()
     {
-        $user = factory(User::class)->create();
+        $this->actingAs(factory(User::class)->create());
 
         $thread = factory(Thread::class)->create([
-            'user_id' => $user->id
+            'user_id' => auth()->id()
         ]);
 
-        $this->get("/profiles/{$user->name}")
+        $this->get('/profiles/' . auth()->user()->name)
         ->assertSee($thread->title)
         ->assertSee($thread->body);
     }
