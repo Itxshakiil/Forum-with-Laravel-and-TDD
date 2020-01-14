@@ -15,6 +15,13 @@ export default {
 
       this.editing = false;
       flash("Reply Updated Successfully");
+    },
+    destroy() {
+      axios.delete("/replies/" + this.attributes.id);
+
+      $(this.$el).fadeOut(300, () => {
+        flash("Reply deleted successfully.");
+      });
     }
   }
 };

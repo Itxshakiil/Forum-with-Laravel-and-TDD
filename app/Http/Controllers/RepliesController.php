@@ -85,8 +85,8 @@ class RepliesController extends Controller
      */
     public function update(Request $request, Reply $reply)
     {
-        $this->authorize('update',$reply);
-        
+        $this->authorize('update', $reply);
+
         $reply->update(['body' => $request->body]);
     }
 
@@ -101,6 +101,10 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         $reply->delete();
+
+        if (request()->expectsJson()) {
+            return response(['status' => 'Reply deleted']);
+        }
         return back()->with('flash', 'Reply Deleted Succesfully.');
     }
 }

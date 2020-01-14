@@ -23,14 +23,8 @@
         </div>
         @can('update', $reply)
         <div class="flex">
-            <button class="p-2" @click=" editing = true">Edit</button>
-            <div class="p-2">
-                <form action="{{route('reply.destroy',['reply' => $reply->id])}}" method="post">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="p-2 bg-red-300 text-red-900 rounded">Delete</button>
-                </form>
-            </div>
+            <button class="px-3 py-2 mb-3 mr-2 text-sm leading-tight text-gray-700 border  rounded appearance-none focus:outline-none" @click=" editing = true">Edit</button>
+            <button class="px-3 py-2 mb-3 text-sm leading-tight bg-red-300 text-red-700 border  rounded appearance-none focus:outline-none" @click="destroy">Delete</button>
         </div>
         @endcan
 

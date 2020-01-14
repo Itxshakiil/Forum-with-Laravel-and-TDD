@@ -1894,7 +1894,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['attributes'],
+  props: ["attributes"],
   data: function data() {
     return {
       editing: false,
@@ -1903,11 +1903,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     update: function update() {
-      axios.patch('/replies/' + this.attributes.id, {
+      axios.patch("/replies/" + this.attributes.id, {
         body: this.body
       });
       this.editing = false;
       flash("Reply Updated Successfully");
+    },
+    destroy: function destroy() {
+      axios["delete"]("/replies/" + this.attributes.id);
+      $(this.$el).fadeOut(300, function () {
+        flash("Reply deleted successfully.");
+      });
     }
   }
 });
