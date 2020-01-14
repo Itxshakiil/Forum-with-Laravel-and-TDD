@@ -11,7 +11,7 @@
     <title> @yield('title',config('app.name', 'Laravel Forum')) </title>
 
     <!-- Scripts -->
-    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -30,7 +30,8 @@
                     </a>
                     <a class="nav-link mr-4" href="{{ route('threads.index') }}">{{ __('All Threads') }}</a>
                     <a class="nav-link mr-4" href="{{ route('threads.create') }}">{{ __('Create Threads') }}</a>
-                    <a class="nav-link mr-4" href="{{ route('threads.index') }}?popular=1">{{ __('Popular Threads') }}</a>
+                    <a class="nav-link mr-4"
+                        href="{{ route('threads.index') }}?popular=1">{{ __('Popular Threads') }}</a>
                     @auth
                     <a class="nav-link mr-4"
                         href="{{ route('threads.index') }}?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>
@@ -90,16 +91,10 @@
         </nav>
 
         <main class="py-4 bg-gray-100">
+            <flash message="{{session('flash')}}"></flash>
             @yield('content')
         </main>
     </div>
-    <script>
-        const toggler = document.querySelector('#navbarDropdown')
-        const navItem = document.querySelector('.dropdown-menu')
-        toggler.addEventListener('click',(e) => {
-            navItem.classList.toggle('hidden');
-        })
-    </script>
 </body>
 
 </html>
