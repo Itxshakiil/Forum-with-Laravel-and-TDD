@@ -21,6 +21,12 @@ trait Favoritable{
         }
     }
     
+    public function unfavorite()
+    {
+        $attributes = ['user_id' => auth()->user()->id];
+
+        $this->favorites()->where($attributes)->delete();
+    }
 
     public function isFavorited()
     {
@@ -28,6 +34,10 @@ trait Favoritable{
             return $this->favorites->where(['user_id' => auth()->user()->id])->count();
         }
         return false;
+    }
+
+    public function getIsFavoritedAttribute(){
+        return $this->isFavorited();
     }
 
     public function getFavoritesCountAttribute()

@@ -28,6 +28,7 @@ Route::resource('threads', 'ThreadsController');
 
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('reply.store');
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->name('reply.favorite');
+Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy')->name('reply.unfavorite');
 Route::patch('/replies/{reply}', 'RepliesController@update')->name('reply.update');
 Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('reply.destroy');
 

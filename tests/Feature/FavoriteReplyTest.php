@@ -39,6 +39,22 @@ class FavoriteReplyTest extends TestCase
     /**
     * @test
     */
+    public function an_authenticated_user_can_unfavorite_any_reply()
+    {
+        $this->actingAs(factory(User::class)->create());
+
+        $reply = factory(Reply::class)->create();
+
+        $reply->favorite();
+
+        $this->delete("/replies/{$reply->id}/favorites");
+
+        $this->assertCount(0, $reply->favorites);
+    }
+
+    /**
+    * @test
+    */
     public function a_user_can_favorite_a_reply_once()
     {
         $this->actingAs(factory(User::class)->create());
