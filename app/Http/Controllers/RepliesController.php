@@ -51,7 +51,7 @@ class RepliesController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return back()->with('flash','Your reply has been added');
+        return back()->with('flash', 'Your reply has been added');
     }
 
     /**
@@ -96,6 +96,9 @@ class RepliesController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $this->authorize('delete', $reply);
+
+        $reply->delete();
+        return back()->with('flash', 'Reply Deleted Succesfully.');
     }
 }

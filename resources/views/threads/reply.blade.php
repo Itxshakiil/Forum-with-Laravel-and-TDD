@@ -12,4 +12,14 @@
         </form>
     </div>
     <p class="p-2">{{$reply->body}}</p>
+    @can('delete', $reply)
+    <div class="p-2">
+        <form action="{{route('reply.destroy',['reply' => $reply->id])}}" method="post">
+            @csrf
+            @method('delete')
+            <button type="submit" class="p-2 text-blue">Delete</button>
+        </form>
+    </div>
+    @endcan
+
 </article>
