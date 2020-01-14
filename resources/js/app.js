@@ -20,7 +20,7 @@ require('./bootstrap');
 
 Vue.component('flash', require('./components/Flash.vue').default);
 // Vue.component('favorite', require('./components/Favorite.vue').default);
-Vue.component('reply', require('./components/Reply.vue').default);
+Vue.component('thread-view', require('./components/pages/Thread.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
