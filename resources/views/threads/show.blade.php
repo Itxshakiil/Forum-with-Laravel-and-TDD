@@ -33,7 +33,7 @@
                 <replies :data="{{$thread->replies }}" @removed="repliesCount--"></replies>
                     {{-- {{$replies->links('pagination.default')}} --}}
                 </div>
-                @auth
+                {{-- @auth
                 <div class="border p-4 mb-2 rounded">
                     <form action="{{route('reply.store',['thread'=>$thread->id,'channel'=>$thread->channel->slug])}}"
                         method="post">
@@ -59,7 +59,7 @@
                 @else
                 <p class="p-4">Please <a href="{{route('login')}}" class="text-blue-500">sign in</a> to participate in the
                     discussion</p>
-                @endauth
+                @endauth --}}
             </div>
             <div class="ml-2 w-full md:w-1/3 bg-white p-5 rounded-lg lg:rounded">
                 This thread was published {{$thread->created_at->diffForHumans()}} by {{$thread->creator->name}} and has
