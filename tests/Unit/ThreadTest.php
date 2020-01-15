@@ -88,4 +88,20 @@ class ThreadTest extends TestCase
     {
         $this->assertInstanceOf(Channel::class, $this->thread->channel);
     }
+
+    /**
+    * @test
+    */
+    public function it_knows_if_authenticated_user_is_subscribed_to_it()
+    {
+        $thread = factory(Thread::class)->create();
+
+        $this->actingAs(factory(User::class)->create());
+
+        $this->assertFalse($thread->isSubscribedTo);
+
+        $thread->subscribe();
+
+        $this->assertTrue($thread->isSubscribedTo);
+    }
 }

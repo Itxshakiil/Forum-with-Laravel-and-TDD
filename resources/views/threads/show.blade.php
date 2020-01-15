@@ -32,10 +32,11 @@
                 <div>
                     <replies @removed="repliesCount--" @added="repliesCount++"></replies>
                 </div>
-            </div>
+            </div>  
             <div class="ml-2 w-full md:w-1/3 bg-white p-5 rounded-lg lg:rounded">
                 This thread was published {{$thread->created_at->diffForHumans()}} by {{$thread->creator->name}} and has
                 <span v-text="repliesCount "></span> {{ Str::plural('comment',$thread->replies_count)}}.
+                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"></subscribe-button>
             </div>
         </div>
     </div>
