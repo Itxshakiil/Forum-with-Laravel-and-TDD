@@ -45,9 +45,8 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_read_reply_associated_with_a_thread()
     {
         $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
-        
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
+
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
     }
 
     /**
@@ -68,7 +67,7 @@ class ReadThreadsTest extends TestCase
         $channel = factory(Channel::class)->create();
         $threadInChannel = factory(Thread::class, ['channel_id' => $channel->id])->create();
         $threadNotInThread = factory(Thread::class)->create();
-        
+
         $this->get("/threads/{$channel->slug}")
         ->assertDontSee($threadNotInThread->title);
 
@@ -96,9 +95,22 @@ class ReadThreadsTest extends TestCase
             'thread_id' => $threadWithThreeeReply->id
         ]);
 
-        $response= $this->getJson('/threads?popular=1')->json();
+        $response = $this->getJson('/threads?popular=1')->json();
 
-        $this->assertEquals([3,1,0], array_column($response, 'replies_count'));
+        $this->assertEquals([3, 1, 0], array_column($response, 'replies_count'));
+    }
+
+    /**
+     * @test
+     */
+    public function a_user_can_filter_by_those_that_are_unanswered()
+    {
+        $thread = factory(Thread::class)->create();
+        factory(Reply::class)->create(['thread_id' => $thread->id]);
+
+        $response = $this->getJson('/threads?unanswer=1')->json();
+
+        $this->assertCount(1, $response);
     }
 
     /**
@@ -106,13 +118,13 @@ class ReadThreadsTest extends TestCase
     */
     public function a_user_can_request_all_replies_for_a_given_thread()
     {
-    $thread= factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create();
 
-    factory(Reply::class,2)->create(['thread_id'=>$thread->id]);
+        factory(Reply::class, 2)->create(['thread_id' => $thread->id]);
 
-    $response =$this->get($thread->path().'/replies')->json();
-    
-    $this->assertCount(1,$response['data']);
-    $this->assertEquals(2,$response['total']);
-}
+        $response = $this->get($thread->path() . '/replies')->json();
+
+        $this->assertCount(2, $response['data']);
+        $this->assertEquals(2, $response['total']);
+    }
 }

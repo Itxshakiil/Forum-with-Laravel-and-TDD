@@ -38,6 +38,8 @@
                     <a class="nav-link mr-4" href="{{ route('threads.create') }}">{{ __('Create Threads') }}</a>
                     <a class="nav-link mr-4"
                         href="{{ route('threads.index') }}?popular=1">{{ __('Popular Threads') }}</a>
+                    <a class="nav-link mr-4"
+                        href="{{ route('threads.index') }}?unanswer=1">{{ __('Unanswered Threads') }}</a>
                     @auth
                     <a class="nav-link mr-4"
                         href="{{ route('threads.index') }}?by={{auth()->user()->name}}">{{ __('My Threads') }}</a>
