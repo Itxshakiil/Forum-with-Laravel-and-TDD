@@ -10,7 +10,7 @@
           placeholder="Anything to say?"
           cols="30"
           rows="5"
-          required 
+          required
           v-model="body"
         ></textarea>
       </div>
@@ -31,10 +31,9 @@
 </template>
 <script>
 export default {
-  props: ['endpoint'],
   data() {
     return {
-      body: '',
+      body: ''
     };
   },
   computed: {
@@ -44,13 +43,15 @@ export default {
   },
   methods: {
     addReply() {
-      axios.post(this.endpoint, { body: this.body }).then(({ data }) => {
-        this.body = '';
+      axios
+        .post(location.pathname + "/replies", { body: this.body })
+        .then(({ data }) => {
+          this.body = '';
 
-        flash("Your Reply has been added");
+          flash("Your Reply has been added");
 
-        this.$emit("created", data);
-      });
+          this.$emit("created", data);
+        });
     }
   }
 };
