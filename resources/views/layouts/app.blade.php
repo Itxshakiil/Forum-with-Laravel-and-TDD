@@ -70,6 +70,7 @@
                         </li>
                         @endif
                         @else
+                        <user-notifications></user-notifications>
                         <li class="nav-item dropdown mr-4">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
