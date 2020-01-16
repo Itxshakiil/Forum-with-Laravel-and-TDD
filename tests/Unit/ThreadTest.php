@@ -3,10 +3,12 @@
 namespace Tests\Unit;
 
 use App\Channel;
+use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -45,6 +47,23 @@ class ThreadTest extends TestCase
             'user_id' => 1,
         ]);
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    /**
+    * @test
+    */
+    public function a_thread_notifies_all_registerd_subscribers_when_a_new_reply_is_added()
+    {
+        Notification::fake();
+
+        $this->actingAs(factory(User::class)->create());
+
+        $this->thread->subscribe()->addReply([
+            'body' => 'Foobar',
+            'user_id' => 1,
+        ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
     }
 
     /**
