@@ -39,16 +39,11 @@ class RepliesController extends Controller
      *
      * @param $channelId
      * @param  \App\Reply  $reply
-     * @param  \App\Inspections\Spam  $spam
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        request()->validate([
-            'body' => ['required']
-        ]);
-
-        $spam->detect(request('body'));
+        $this->validateReply();
 
         $reply = $thread->addReply([
             'body' => request('body'),
@@ -95,6 +90,8 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
+        $this->validateReply();
+
         $reply->update(['body' => $request->body]);
     }
 
@@ -114,5 +111,14 @@ class RepliesController extends Controller
             return response(['status' => 'Reply deleted']);
         }
         return back()->with('flash', 'Reply Deleted Succesfully.');
+    }
+
+    protected function validateReply()
+    {
+        request()->validate([
+            'body' => ['required']
+        ]);
+
+        resolve(Spam::class)->detect(request('body'));
     }
 }
