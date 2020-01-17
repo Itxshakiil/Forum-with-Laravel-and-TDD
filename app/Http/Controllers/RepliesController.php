@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Inspections\Spam;
 use App\Reply;
 use App\Thread;
 use Exception;
@@ -45,7 +44,7 @@ class RepliesController extends Controller
     public function store($channelId, Thread $thread)
     {
         try {
-            $this->validateReply();
+            request()->validate(['body' => ['required', 'spamfree']]);
 
             $reply = $thread->addReply([
                 'body' => request('body'),
@@ -96,10 +95,9 @@ class RepliesController extends Controller
         $this->authorize('update', $reply);
 
         try {
-            $this->validateReply();
+            request()->validate(['body' => ['required', 'spamfree']]);
 
             $reply->update(['body' => $request->body]);
-            
         } catch (Exception $e) {
             return response('Sorry, your reply could not be updated.', 422);
         }
@@ -121,14 +119,5 @@ class RepliesController extends Controller
             return response(['status' => 'Reply deleted']);
         }
         return back()->with('flash', 'Reply Deleted Succesfully.');
-    }
-
-    protected function validateReply()
-    {
-        request()->validate([
-            'body' => ['required']
-        ]);
-
-        resolve(Spam::class)->detect(request('body'));
     }
 }

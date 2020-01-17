@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Channel;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
         \view()->composer('threads.create', function ($view) {
             $view->with('channels', Channel::all());
         });
+
+        Validator::extend('spamfree', 'App\Rules\SpamFree@passes', 'The :attribute contains spam.');
     }
 }

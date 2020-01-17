@@ -40,7 +40,7 @@
                         <textarea
                             class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border  rounded shadow appearance-none focus:outline-none @error('body') border-red-500 @enderror"
                             id="body" type="body" name="body" placeholder="Anything to say?" cols="30"
-                            rows="5" required></textarea>
+                    rows="5" required>{{old('body')}}</textarea>
                         @error('body')
                         <p class="text-xs italic text-red-500" role="alert">{{ $message }}</p>
                         @enderror
