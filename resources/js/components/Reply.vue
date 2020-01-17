@@ -59,9 +59,13 @@ export default {
   },
   methods: {
     update() {
-      axios.patch("/replies/" + this.data.id, {
-        body: this.body
-      });
+      axios
+        .patch("/replies/" + this.data.id, {
+          body: this.body
+        })
+        .catch(error => {
+          flash(error.response.data, "danger");
+        });
 
       this.editing = false;
       flash("Reply Updated Successfully");
@@ -69,6 +73,7 @@ export default {
     destroy() {
       axios.delete("/replies/" + this.data.id);
 
+      flash("Reply deleted successfully.");
       this.$emit("deleted", this.data.id);
     }
   }

@@ -1902,11 +1902,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["message"],
   data: function data() {
     return {
-      body: '',
+      body: "",
+      level: "success",
       show: false
     };
   },
@@ -1917,13 +1919,29 @@ __webpack_require__.r(__webpack_exports__);
       this.flash(this.message);
     }
 
-    window.events.$on('flash', function (message) {
-      return _this.flash(message);
+    window.events.$on("flash", function (data) {
+      return _this.flash(data);
     });
   },
+  computed: {
+    classes: function classes() {
+      if (this.level == "success") {
+        return "green";
+      }
+
+      if (this.level == "danger") {
+        return "red";
+      }
+
+      if (this.level == "warning") {
+        return "yellow";
+      }
+    }
+  },
   methods: {
-    flash: function flash(message) {
-      this.body = message;
+    flash: function flash(data) {
+      this.body = data.message;
+      this.level = data.level;
       this.show = true;
       this.hide();
     },
@@ -1982,7 +2000,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      body: ''
+      body: ""
     };
   },
   computed: {
@@ -1996,6 +2014,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post(location.pathname + "/replies", {
         body: this.body
+      })["catch"](function (error) {
+        flash(error.response.data, "danger");
       }).then(function (_ref) {
         var data = _ref.data;
         _this.body = '';
@@ -2217,12 +2237,15 @@ __webpack_require__.r(__webpack_exports__);
     update: function update() {
       axios.patch("/replies/" + this.data.id, {
         body: this.body
+      })["catch"](function (error) {
+        flash(error.response.data, "danger");
       });
       this.editing = false;
       flash("Reply Updated Successfully");
     },
     destroy: function destroy() {
       axios["delete"]("/replies/" + this.data.id);
+      flash("Reply deleted successfully.");
       this.$emit("deleted", this.data.id);
     }
   }
@@ -2286,6 +2309,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2295,7 +2322,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    axios.get('/profiles/' + window.App.user.name + '/notifications').then(function (response) {
+    axios.get("/profiles/" + window.App.user.name + "/notifications").then(function (response) {
       return _this.notifications = response.data;
     });
   },
@@ -2303,7 +2330,7 @@ __webpack_require__.r(__webpack_exports__);
     markAsRead: function markAsRead(notification) {
       var _this2 = this;
 
-      axios["delete"]('/profiles/' + window.App.user.name + '/notifications/' + notification.id).then(function (response) {
+      axios["delete"]("/profiles/" + window.App.user.name + "/notifications/" + notification.id).then(function (response) {
         return _this2.notifications = response.data;
       });
     }
@@ -2352,7 +2379,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".flash-alert[data-v-e4161ed6]{\n  position:fixed;\n  bottom:30px;\n  right:30px;\n}\r\n", ""]);
+exports.push([module.i, ".flash-alert[data-v-e4161ed6] {\n  position: fixed;\n  bottom: 30px;\n  right: 30px;\n}\r\n", ""]);
 
 // exports
 
@@ -33883,22 +33910,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      directives: [
-        { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
-      ],
-      staticClass:
-        "flash-alert bg-green-100 border border-green-400 text-green-700 px-4 py-3 my-2 rounded w-64",
-      attrs: { role: "alert" }
-    },
-    [
-      _c("strong", { staticClass: "font-bold" }, [_vm._v("Success!")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "block sm:inline" }, [_vm._v(_vm._s(_vm.body))])
-    ]
-  )
+  return _c("div", {
+    directives: [
+      { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
+    ],
+    staticClass: "flash-alert border px-4 py-3 my-2 rounded w-64",
+    class:
+      "bg-" +
+      _vm.classes +
+      "-100 text-" +
+      _vm.classes +
+      "-700 border-" +
+      _vm.classes +
+      "-400",
+    attrs: { role: "alert" },
+    domProps: { textContent: _vm._s(_vm.body) }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -34281,7 +34308,7 @@ var render = function() {
     ? _c(
         "div",
         [
-          _c("div", [_vm._v(" Notifications")]),
+          _c("div", [_vm._v("Notifications")]),
           _vm._v(" "),
           _vm._l(_vm.notifications, function(notification) {
             return _c("li", [
@@ -46564,7 +46591,11 @@ Vue.prototype.authorize = function (handler) {
 window.events = new Vue();
 
 window.flash = function (message) {
-  window.events.$emit('flash', message);
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+  window.events.$emit('flash', {
+    message: message,
+    level: level
+  });
 };
 
 /***/ }),

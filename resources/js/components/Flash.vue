@@ -1,10 +1,11 @@
 <template>
   <div
-    class="flash-alert bg-green-100 border border-green-400 text-green-700 px-4 py-3 my-2 rounded w-64"
-    role="alert" v-show="show">
-    <strong class="font-bold">Success!</strong>
-    <span class="block sm:inline">{{body}}</span>
-  </div>
+    class="flash-alert border px-4 py-3 my-2 rounded w-64"
+    :class="'bg-'+classes+'-100 text-'+classes+'-700 border-'+classes+'-400'"
+    role="alert"
+    v-show="show"
+    v-text="body"
+  ></div>
 </template>
 
 <script>
@@ -12,34 +13,50 @@ export default {
   props: ["message"],
   data() {
     return {
-      body: '',
-      show: false,
+      body: "",
+      level: "success",
+      show: false
     };
-  },created() {
-      if(this.message){
-          this.flash(this.message);
+  },
+  created() {
+    if (this.message) {
+      this.flash(this.message);
+    }
+    window.events.$on("flash", data => this.flash(data));
+  },
+  computed: {
+    classes() {
+      if (this.level == "success") {
+        return "green";
       }
-      window.events.$on('flash',message => this.flash(message))
+      if (this.level == "danger") {
+        return "red";
+      }
+      if (this.level == "warning") {
+        return "yellow";
+      }
+    }
   },
   methods: {
-      flash(message){
-          this.body = message
-          this.show=true
+    flash(data) {
+      this.body = data.message;
+      this.level = data.level;
+      this.show = true;
 
-          this.hide()
-      },
-      hide(){
-          setTimeout(()=>{
-              this.show = false
-          },3000)
-      }
-  },
+      this.hide();
+    },
+    hide() {
+      setTimeout(() => {
+        this.show = false;
+      }, 3000);
+    }
+  }
 };
 </script>
 <style scoped>
-.flash-alert{
-  position:fixed;
-  bottom:30px;
-  right:30px;
+.flash-alert {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
 }
 </style>
