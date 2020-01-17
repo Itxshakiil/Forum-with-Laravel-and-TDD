@@ -73,6 +73,8 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
+        (new Spam())->detect($reply->body);
+
         $reply = $this->replies()->create($reply);
 
         $this->notifySubscribers($reply);
@@ -113,7 +115,7 @@ class Thread extends Model
     {
         $key = $user->visitedThreadCacheKey($this);
 
-         return $this->updated_at > cache($key);
+        return $this->updated_at > cache($key);
     }
 
     public function getIsSubscribedToAttribute()

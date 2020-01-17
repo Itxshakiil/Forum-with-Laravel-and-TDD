@@ -18,7 +18,7 @@ class RepliesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($channelId,Thread $thread)
+    public function index($channelId, Thread $thread)
     {
         return $thread->replies()->paginate(20);
     }
