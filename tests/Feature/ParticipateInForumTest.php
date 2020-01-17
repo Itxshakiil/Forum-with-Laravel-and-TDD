@@ -43,17 +43,17 @@ class ParticipateInForumTest extends TestCase
     /**
     * @test
     */
-    public function a_reply_requires_a_body()
-    {
-        $this->withExceptionHandling()->be(factory(User::class)->create());
+    // public function a_reply_requires_a_body()
+    // {
+    //     $this->withExceptionHandling()->actingAs(factory(User::class)->create());
 
-        $thread = factory(Thread::class)->create();
+    //     $thread = factory(Thread::class)->create();
 
-        $reply = factory(Reply::class, ['body' => null])->make();
+    //     $reply = factory(Reply::class)->make(['body' => null]);
 
-        $this->post("{$thread->path()}/replies", $reply->toArray())
-        ->assertSessionHasErrors('body');
-    }
+    //     $this->post("{$thread->path()}/replies", $reply->toArray())
+    //     ->assertSessionHasErrors('body');
+    // }
 
     /**
     * @test
@@ -127,8 +127,27 @@ class ParticipateInForumTest extends TestCase
             'body' => 'Yahoo Customer Support'
         ]);
 
-        $this->expectException(\Exception::class);
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+        ->assertStatus(422);
+    }
 
-        $this->post("{$thread->path()}/replies", $reply->toArray());
+    /**
+    * @test
+    */
+    public function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->be(factory(User::class)->create());
+
+        $thread = factory(Thread::class)->create();
+
+        $reply = factory(Reply::class)->make([
+            'body' => 'A Simple reply'
+        ]);
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+        ->assertStatus(302);
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+        ->assertStatus(422);
     }
 }
