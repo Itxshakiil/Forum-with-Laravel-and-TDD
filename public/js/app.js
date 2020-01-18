@@ -2208,6 +2208,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["data"],
@@ -34170,49 +34173,52 @@ var render = function() {
       _vm._v(" "),
       _vm.editing
         ? _c("div", [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.body,
-                  expression: "body"
-                }
-              ],
-              staticClass:
-                "w-full px-3 py-2 m-1 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none",
-              domProps: { value: _vm.body },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+            _c("form", { on: { submit: _vm.update } }, [
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.body,
+                    expression: "body"
                   }
-                  _vm.body = $event.target.value
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "p-2 text-blue-900 bg-blue-200 rounded",
-                on: { click: _vm.update }
-              },
-              [_vm._v("Update")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "p-2 border rounded",
+                ],
+                staticClass:
+                  "w-full px-3 py-2 m-1 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none",
+                attrs: { required: "" },
+                domProps: { value: _vm.body },
                 on: {
-                  click: function($event) {
-                    _vm.editing = false
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.body = $event.target.value
                   }
                 }
-              },
-              [_vm._v("Cancel")]
-            )
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "p-2 text-blue-900 bg-blue-200 rounded",
+                  attrs: { type: "submit" }
+                },
+                [_vm._v("Update")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "p-2 border rounded",
+                  on: {
+                    click: function($event) {
+                      _vm.editing = false
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
+              )
+            ])
           ])
         : _c("div", {
             staticClass: "p-2",

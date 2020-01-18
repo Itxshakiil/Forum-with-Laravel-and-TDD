@@ -15,15 +15,17 @@
       </div>
     </div>
     <div v-if="editing">
-      <textarea
-        class="w-full px-3 py-2 m-1 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none"
-        v-model="body"
-      ></textarea>
-      <button class="p-2 text-blue-900 bg-blue-200 rounded" @click="update">Update</button>
-      <button class="p-2 border rounded" @click=" editing = false">Cancel</button>
+      <form @submit="update">
+        <textarea
+          class="w-full px-3 py-2 m-1 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none"
+          v-model="body"
+          required
+        ></textarea>
+        <button class="p-2 text-blue-900 bg-blue-200 rounded" type="submit">Update</button>
+        <button class="p-2 border rounded" @click=" editing = false">Cancel</button>
+      </form>
     </div>
     <div v-else v-text="body" class="p-2"></div>
-    <!-- @can('update', $reply) -->
     <div class="flex" v-if="canUpdate">
       <button
         class="px-3 py-2 mb-3 mr-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none"
@@ -34,7 +36,6 @@
         @click="destroy"
       >Delete</button>
     </div>
-    <!-- @endcan -->
   </article>
 </template>
 <script>

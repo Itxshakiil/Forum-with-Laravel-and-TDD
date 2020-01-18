@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReplyRequest;
 use App\Reply;
 use App\Thread;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -88,13 +87,9 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        try {
-            request()->validate(['body' => ['required', 'spamfree']]);
+        request()->validate(['body' => ['required', 'spamfree']]);
 
-            $reply->update(['body' => $request->body]);
-        } catch (Exception $e) {
-            return response('Sorry, your reply could not be updated.', 422);
-        }
+        $reply->update(['body' => $request->body]);
     }
 
     /**
