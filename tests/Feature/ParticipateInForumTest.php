@@ -43,17 +43,17 @@ class ParticipateInForumTest extends TestCase
     /**
     * @test
     */
-    // public function a_reply_requires_a_body()
-    // {
-    //     $this->withExceptionHandling()->actingAs(factory(User::class)->create());
+    public function a_reply_requires_a_body()
+    {
+        $this->withExceptionHandling()->actingAs(factory(User::class)->create());
 
-    //     $thread = factory(Thread::class)->create();
+        $thread = factory(Thread::class)->create();
 
-    //     $reply = factory(Reply::class)->make(['body' => null]);
+        $reply = factory(Reply::class)->make(['body' => null]);
 
-    //     $this->post("{$thread->path()}/replies", $reply->toArray())
-    //     ->assertSessionHasErrors('body');
-    // }
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+        ->assertSessionHasErrors('body');
+    }
 
     /**
     * @test
@@ -119,7 +119,7 @@ class ParticipateInForumTest extends TestCase
     */
     public function replies_that_contain_spam_may_not_be_created()
     {
-        $this->be(factory(User::class)->create());
+        $this->withExceptionHandling()->be(factory(User::class)->create());
 
         $thread = factory(Thread::class)->create();
 
@@ -127,7 +127,7 @@ class ParticipateInForumTest extends TestCase
             'body' => 'Yahoo Customer Support'
         ]);
 
-        $this->post("{$thread->path()}/replies", $reply->toArray())
+        $this->json('post', "{$thread->path()}/replies", $reply->toArray())
         ->assertStatus(422);
     }
 
@@ -136,7 +136,7 @@ class ParticipateInForumTest extends TestCase
     */
     public function users_may_only_reply_a_maximum_of_once_per_minute()
     {
-        $this->be(factory(User::class)->create());
+        $this->withExceptionHandling()->be(factory(User::class)->create());
 
         $thread = factory(Thread::class)->create();
 
@@ -145,9 +145,9 @@ class ParticipateInForumTest extends TestCase
         ]);
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
-        ->assertStatus(302);
+        ->assertStatus(201);
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
-        ->assertStatus(422);
+        ->assertStatus(429);
     }
 }

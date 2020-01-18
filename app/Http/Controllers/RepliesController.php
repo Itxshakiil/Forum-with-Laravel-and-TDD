@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReplyRequest;
 use App\Reply;
 use App\Thread;
 use Exception;
@@ -40,30 +41,18 @@ class RepliesController extends Controller
      *
      * @param $channelId
      * @param  \App\Reply  $reply
+     * @param  \App\Http\Requests\CreateReplyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
         if (Gate::denies('create', new Reply)) {
-            return response('You are posting too frequently.Please take a break :)', 422);
+            return response('You are posting too frequently.Please take a break :)', 429);
         }
-
-        try {
-            request()->validate(['body' => ['required', 'spamfree']]);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch (Exception $e) {
-            return response('Sorry, your reply could not be saved.', 422);
-        }
-
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
-        }
-
-        return back()->with('flash', 'Your reply has been added');
+        return $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
     }
 
     /**
