@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title','Login to your account')
+@section('extra-css')
+<link href="{{ asset('css/vendor/jquery.atwho.min.css') }}" rel="stylesheet">
+    
+@endsection
 @section('content')
 <thread-view :initial-replies-count="{{$thread->replies_count}}" inline-template>
     <div class="container mx-auto">
