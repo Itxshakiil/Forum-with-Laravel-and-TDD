@@ -16,7 +16,7 @@
                         <div class="flex">
                             <h3 class="p-2 flex-1">
                                 <a href="{{route('profile.show',$thread->creator->name)}}" class="text-blue-500">
-                                    <img src="{{$thread->creator->avatar()}}" alt="" width="25" height="25"
+                                    <img src="{{$thread->creator->avatar_path}}" alt="" width="25" height="25"
                                         class="inline rounded-full">
                                     {{$thread->creator->name}}
                                 </a>
