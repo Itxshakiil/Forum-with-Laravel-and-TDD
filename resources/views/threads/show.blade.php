@@ -2,7 +2,6 @@
 @section('title','Login to your account')
 @section('extra-css')
 <link href="{{ asset('css/vendor/jquery.atwho.min.css') }}" rel="stylesheet">
-    
 @endsection
 @section('content')
 <thread-view :initial-replies-count="{{$thread->replies_count}}" inline-template>
@@ -16,8 +15,10 @@
                     <article class="border p-4 mb-2 rounded">
                         <div class="flex">
                             <h3 class="p-2 flex-1">
-                                <a href="{{route('profile.show',$thread->creator->name)}}"
-                                    class="text-blue-500">{{$thread->creator->name}}
+                                <a href="{{route('profile.show',$thread->creator->name)}}" class="text-blue-500">
+                                    <img src="{{$thread->creator->avatar()}}" alt="" width="25" height="25"
+                                        class="inline rounded-full">
+                                    {{$thread->creator->name}}
                                 </a>
                                 posted: {{$thread->title}}
                             </h3>
@@ -36,7 +37,7 @@
                 <div>
                     <replies @removed="repliesCount--" @added="repliesCount++"></replies>
                 </div>
-            </div>  
+            </div>
             <div class="ml-2 w-full md:w-1/3 bg-white p-5 rounded-lg lg:rounded">
                 This thread was published {{$thread->created_at->diffForHumans()}} by {{$thread->creator->name}} and has
                 <span v-text="repliesCount "></span> {{ Str::plural('comment',$thread->replies_count)}}.
