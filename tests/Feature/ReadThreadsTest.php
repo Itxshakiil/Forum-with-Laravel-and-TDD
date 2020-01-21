@@ -135,10 +135,10 @@ class ReadThreadsTest extends TestCase
     {
         $thread = factory(Thread::class)->create();
 
-        $this->assertSame(0,$thread->visits);
-        
-        $this->call('GET',$thread->path());
+        $this->assertSame(0, $thread->visits);
 
-        $this->assertEquals(1,$thread->fresh()->visits);
+        $this->call('GET', $thread->path());
+
+        $this->assertEquals(1, $thread->fresh()->visits);
     }
 }

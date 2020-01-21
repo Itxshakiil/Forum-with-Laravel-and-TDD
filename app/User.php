@@ -3,12 +3,14 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
+    use Notifiable, AuthMustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -65,7 +67,7 @@ class User extends Authenticatable
     public function getAvatarPathAttribute($avatar)
     {
         $path = $avatar ?? 'avatars/default.jpg';
-        return '/storage/'.$path;
+        return '/storage/' . $path;
     }
 
     public function read($thread)

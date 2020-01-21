@@ -32,7 +32,7 @@ class CreateThreadsTest extends TestCase
     */
     public function an_authenticated_user_can_create_new_forum_threads()
     {
-        $this->actingAs(factory(User::class)->create());
+        $this->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
         
         $thread = factory(Thread::class)->make();
         
@@ -78,7 +78,7 @@ class CreateThreadsTest extends TestCase
 
     public function publishThreads($overrirdes =[])
     {
-        $this->withExceptionHandling()->actingAs(factory(User::class)->create());
+        $this->withExceptionHandling()->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
         
         $thread = factory(Thread::class)->make($overrirdes);
         
@@ -102,5 +102,19 @@ class CreateThreadsTest extends TestCase
         $this->get('/threads?by=JohnDoe')
         ->assertSee($threadByJohn->title)
         ->assertDontSee($threadNotByJohn->title);
+    }
+    
+    /**
+    * @test
+    */
+    public function authenticated_user_must_confirm_their_email_address_before_creating_thread()
+    {
+        $this->withExceptionHandling()->actingAs(factory(User::class)->create());
+        
+        $thread = factory(Thread::class)->make();
+        
+        $this->post('/threads', $thread->toArray())
+        // ->assertStatus(302)
+        ->assertRedirect('/email/verify');
     }
 }
