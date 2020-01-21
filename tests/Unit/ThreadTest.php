@@ -6,7 +6,6 @@ use App\Channel;
 use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -70,9 +69,12 @@ class ThreadTest extends TestCase
     /**
     * @test
     */
-    public function a_thread_can_make_a_string_path()
+    public function a_thread_has_a_path()
     {
-        $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}", $this->thread->path());
+        $this->assertEquals(
+            "/threads/{$this->thread->channel->slug}/{$this->thread->slug}",
+            $this->thread->path()
+        );
     }
 
     /**
@@ -117,11 +119,11 @@ class ThreadTest extends TestCase
         $thread = factory(Thread::class)->create();
 
         $this->actingAs(factory(User::class)->create());
-        
+
         $this->assertFalse($thread->isSubscribedTo);
-        
+
         $thread->subscribe();
-        
+
         $this->assertTrue($thread->isSubscribedTo);
     }
 
@@ -133,9 +135,9 @@ class ThreadTest extends TestCase
         $this->actingAs(factory(User::class)->create());
 
         $thread = factory(Thread::class)->create();
-        
+
         $this->assertTrue($thread->hasUpdatesFor(auth()->user()));
-        
+
         auth()->user()->read($thread);
 
         $this->assertFalse($thread->hasUpdatesFor(auth()->user()));

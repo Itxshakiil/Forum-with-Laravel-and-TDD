@@ -64,6 +64,26 @@ class CreateThreadsTest extends TestCase
     /**
      * @test
      */
+    public function a_thread_has_a_unique_slug()
+    {
+        $this->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
+
+        $thread = factory(Thread::class)->create(['title' => 'Foo Title','slug'=>'foo-title']);
+
+        $this->assertEquals($thread->fresh()->slug,'foo-title');
+
+        $this->post(route('threads.index'),$thread->toArray());
+
+        $this->assertTrue(Thread::whereSlug('foo-title-1')->exists());
+
+        $this->post(route('threads.index'),$thread->toArray());
+
+        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+    }
+
+    /**
+     * @test
+     */
     public function a_thread_requires_a_valid_channel()
     {
         factory(Channel::class, 2)->create();

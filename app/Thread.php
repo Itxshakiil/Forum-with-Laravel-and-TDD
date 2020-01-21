@@ -4,6 +4,7 @@ namespace App;
 
 use App\Providers\ThreadRecievedNewReply;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Thread extends Model
 {
@@ -26,6 +27,11 @@ class Thread extends Model
         });
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     /**
      * Get a string path for the thread.
      *
@@ -33,7 +39,7 @@ class Thread extends Model
      */
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     /**
@@ -114,6 +120,14 @@ class Thread extends Model
         return $this->subscriptions()
         ->where('user_id', auth()->id())
         ->exists();
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $count = static::where('slug', 'like', Str::slug($value) . '%')->count();
+        $value =($count > 0) ? ($value . '-' . $count) : $value;
+        
+        $this->attributes['slug'] =Str::slug($value);
     }
 
     public function scopeFilter($builder, $filters)
