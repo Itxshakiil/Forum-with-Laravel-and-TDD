@@ -19,5 +19,7 @@
         </p>
     </div>
     <p class="p-2">{{$thread->body}}</p>
+    <hr>
+    <p>{{$thread->visits}} Visits</p>
 </article>
 @endforeach
