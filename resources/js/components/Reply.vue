@@ -56,9 +56,14 @@ export default {
       editing: false,
       id: this.data.id,
       body: this.data.body,
-      isBest: false,
-      reply:this.data
+      isBest: this.data.isBest,
+      reply: this.data
     };
+  },
+  created() {
+    window.events.$on("best-reply-selected", id => {
+      this.isBest = id == this.id;
+    });
   },
   computed: {
     ago() {
@@ -89,7 +94,9 @@ export default {
       this.$emit("deleted", this.data.id);
     },
     markAsBest() {
-      this.isBest = true;
+      axios.post("/replies/" + this.data.id + "/best");
+
+      window.events.$emit("best-reply-selected", this.id);
     }
   }
 };
