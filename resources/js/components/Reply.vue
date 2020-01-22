@@ -7,15 +7,15 @@
     <div class="flex">
       <p class="text-sm flex-1">
         <a
-          :href="'/profiles/'+this.data.owner.name"
+          :href="'/profiles/'+this.reply.owner.name"
           class="text-blue-500"
-          v-text="this.data.owner.name"
+          v-text="this.reply.owner.name"
         ></a>
         said
         <span v-text="ago"></span> ...
       </p>
       <div v-if="signedIn">
-        <favorite :reply="data"></favorite>
+        <favorite :reply="reply"></favorite>
       </div>
     </div>
     <div v-if="editing">
@@ -31,7 +31,7 @@
     </div>
     <div v-else v-html="body" class="p-2"></div>
     <div class="flex">
-      <div v-if="authorize('updateReply',reply)">
+      <div v-if="authorize('owns',reply)">
         <button
           class="px-3 py-2 mb-3 mr-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none"
           @click="edit"
@@ -41,7 +41,7 @@
           @click="destroy"
         >Delete</button>
       </div>
-      <button class="p-2 border rounded ml-auto" @click="markAsBest" v-show="!isBest">BestReply?</button>
+      <button class="p-2 border rounded ml-auto" @click="markAsBest" v-if="authorize('owns',reply.thread) && !isBest">BestReply?</button>
     </div>
   </article>
 </template>
@@ -49,15 +49,14 @@
 import Favorite from "./Favorite.vue";
 import moment from "moment";
 export default {
-  props: ["data"],
+  props: ["reply"],
   components: { Favorite },
   data() {
     return {
       editing: false,
-      id: this.data.id,
-      body: this.data.body,
-      isBest: this.data.isBest,
-      reply: this.data
+      id: this.reply.id,
+      body: this.reply.body,
+      isBest: this.reply.isBest,
     };
   },
   created() {
@@ -67,7 +66,7 @@ export default {
   },
   computed: {
     ago() {
-      return moment(this.data.created_at).fromNow();
+      return moment(this.reply.created_at).fromNow();
     }
   },
   methods: {
@@ -77,7 +76,7 @@ export default {
     },
     update() {
       axios
-        .patch("/replies/" + this.data.id, {
+        .patch("/replies/" + this.id, {
           body: this.body
         })
         .catch(error => {
@@ -88,13 +87,13 @@ export default {
       flash("Reply Updated Successfully");
     },
     destroy() {
-      axios.delete("/replies/" + this.data.id);
+      axios.delete("/replies/" + this.id);
 
       flash("Reply deleted successfully.");
-      this.$emit("deleted", this.data.id);
+      this.$emit("deleted", this.id);
     },
     markAsBest() {
-      axios.post("/replies/" + this.data.id + "/best");
+      axios.post("/replies/" + this.id + "/best");
 
       window.events.$emit("best-reply-selected", this.id);
     }
