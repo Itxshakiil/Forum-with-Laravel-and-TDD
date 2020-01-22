@@ -4,7 +4,6 @@
 
 use App\Thread;
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
 
 $factory->define(Thread::class, function (Faker $faker) {
     $title = $faker->sentence;
@@ -18,6 +17,7 @@ $factory->define(Thread::class, function (Faker $faker) {
         // 'user_id' => $faker->numberBetween(1,30),
         'visits' => 0,
         'title' => $title,
+        'locked' => false,
         'body' => $faker->paragraph,
     ];
 });

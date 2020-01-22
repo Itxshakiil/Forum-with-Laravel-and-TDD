@@ -74,4 +74,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         cache()->forever($this->visitedThreadCacheKey($thread), Carbon::now());
     }
+
+    public function isAdmin()
+    {
+        return in_array($this->name, ['JohnDoe', 'JaneDoe']);
+    }
 }
