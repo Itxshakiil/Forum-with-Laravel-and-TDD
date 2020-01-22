@@ -1,5 +1,9 @@
 <template>
-  <article :id="'reply-'+id" class="border p-4 mb-2 rounded">
+  <article
+    :id="'reply-'+id"
+    class="border p-4 mb-2 rounded"
+    :class="isBest ? 'border-green-200' : ''"
+  >
     <div class="flex">
       <p class="text-sm flex-1">
         <a
@@ -26,21 +30,24 @@
       </form>
     </div>
     <div v-else v-html="body" class="p-2"></div>
-    <div class="flex" v-if="canUpdate">
-      <button
-        class="px-3 py-2 mb-3 mr-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none"
-        @click="edit"
-      >Edit</button>
-      <button
-        class="px-3 py-2 mb-3 text-sm leading-tight bg-red-300 text-red-700 border rounded appearance-none focus:outline-none"
-        @click="destroy"
-      >Delete</button>
+    <div class="flex">
+      <div v-if="authorize('updateReply',reply)">
+        <button
+          class="px-3 py-2 mb-3 mr-2 text-sm leading-tight text-gray-700 border rounded appearance-none focus:outline-none"
+          @click="edit"
+        >Edit</button>
+        <button
+          class="px-3 py-2 mb-3 text-sm leading-tight bg-red-300 text-red-700 border rounded appearance-none focus:outline-none"
+          @click="destroy"
+        >Delete</button>
+      </div>
+      <button class="p-2 border rounded ml-auto" @click="markAsBest" v-show="!isBest">BestReply?</button>
     </div>
   </article>
 </template>
 <script>
 import Favorite from "./Favorite.vue";
-import moment from  'moment';
+import moment from "moment";
 export default {
   props: ["data"],
   components: { Favorite },
@@ -48,18 +55,14 @@ export default {
     return {
       editing: false,
       id: this.data.id,
-      body: this.data.body
+      body: this.data.body,
+      isBest: false,
+      reply:this.data
     };
   },
   computed: {
-    ago(){
-      return moment(this.data.created_at).fromNow()
-    },
-    signedIn() {
-      return window.App.signedIn;
-    },
-    canUpdate() {
-      return this.authorize(user => this.data.user_id == user.id);
+    ago() {
+      return moment(this.data.created_at).fromNow();
     }
   },
   methods: {
@@ -84,6 +87,9 @@ export default {
 
       flash("Reply deleted successfully.");
       this.$emit("deleted", this.data.id);
+    },
+    markAsBest() {
+      this.isBest = true;
     }
   }
 };
