@@ -46,10 +46,10 @@ class ReplyTest extends TestCase
     public function it_can_detect_all_mentioned_users_in_the_body()
     {
         $reply = factory(Reply::class)->create(['body' => '@JohnDoe talk to @JaneDoe']);
-        
+
         $this->assertEquals(['JohnDoe', 'JaneDoe'], $reply->mentionedUsers()) ;
     }
-    
+
     /**
      * @test
     */
@@ -61,5 +61,19 @@ class ReplyTest extends TestCase
             'Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.',
             $reply->body
         );
+    }
+
+    /**
+    * @test
+    */
+    public function it_knows_if_it_is_the_best_reply()
+    {
+        $reply = factory(Reply::class)->create();
+
+        $this->assertFalse($reply->isBest());
+
+        $reply->thread->update(['best_reply_id' => $reply->id]);
+
+        $this->assertTrue($reply->isBest());
     }
 }

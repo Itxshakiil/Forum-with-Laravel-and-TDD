@@ -146,4 +146,9 @@ class Thread extends Model
     {
         return $filters->apply($builder);
     }
+
+    public function markBestReply(Reply $reply)
+    {
+        $this->update(['best_reply_id' => $reply->id]);
+    }
 }
