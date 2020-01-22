@@ -32,12 +32,12 @@ class CreateThreadsTest extends TestCase
     */
     public function an_authenticated_user_can_create_new_forum_threads()
     {
-        $this->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
-        
+        $this->actingAs(factory(User::class)->create(['email_verified_at' => now()]));
+
         $thread = factory(Thread::class)->make();
-        
-        $response =$this->post('/threads', $thread->toArray());
-        
+
+        $response = $this->post('/threads', $thread->toArray());
+
         $this->get($response->headers->get('Location'))
         ->assertSee($thread->title)
         ->assertSee($thread->body);
@@ -66,19 +66,21 @@ class CreateThreadsTest extends TestCase
      */
     public function a_thread_has_a_unique_slug()
     {
-        $this->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
+        $this->actingAs(factory(User::class)->create(['email_verified_at' => now()]));
 
-        $thread = factory(Thread::class)->create(['title' => 'Foo Title','slug'=>'foo-title']);
+        $thread = factory(Thread::class)->create(['title' => 'Foo Title']);
 
-        $this->assertEquals($thread->fresh()->slug,'foo-title');
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
 
-        $this->post(route('threads.index'),$thread->toArray());
+        $this->post(route('threads.index'), $thread->toArray());
 
         $this->assertTrue(Thread::whereSlug('foo-title-1')->exists());
 
-        $this->post(route('threads.index'),$thread->toArray());
+        Thread::where('slug', 'foo-title')->delete();
 
-        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+        $this->post(route('threads.index'), $thread->toArray());
+
+        $this->assertTrue(Thread::whereSlug('foo-title-1-3')->exists());
     }
 
     /**
@@ -87,24 +89,23 @@ class CreateThreadsTest extends TestCase
     public function a_thread_requires_a_valid_channel()
     {
         factory(Channel::class, 2)->create();
-        
+
         $this->publishThreads(['channel_id' => null])
         ->assertSessionHasErrors('channel_id');
-    
+
         $this->publishThreads(['channel_id' => 999])
         ->assertSessionHasErrors('channel_id');
     }
 
-
-    public function publishThreads($overrirdes =[])
+    public function publishThreads($overrirdes = [])
     {
-        $this->withExceptionHandling()->actingAs(factory(User::class)->create(['email_verified_at'=>now()]));
-        
+        $this->withExceptionHandling()->actingAs(factory(User::class)->create(['email_verified_at' => now()]));
+
         $thread = factory(Thread::class)->make($overrirdes);
-        
+
         return $this->post('/threads', $thread->toArray());
     }
-    
+
     /**
      * @test
      */
@@ -115,24 +116,24 @@ class CreateThreadsTest extends TestCase
         ]));
 
         $threadByJohn = factory(Thread::class)->create([
-        'user_id' => auth()->id()
+            'user_id' => auth()->id()
         ]);
-        $threadNotByJohn =  factory(Thread::class)->create();
-    
+        $threadNotByJohn = factory(Thread::class)->create();
+
         $this->get('/threads?by=JohnDoe')
         ->assertSee($threadByJohn->title)
         ->assertDontSee($threadNotByJohn->title);
     }
-    
+
     /**
     * @test
     */
     public function authenticated_user_must_confirm_their_email_address_before_creating_thread()
     {
         $this->withExceptionHandling()->actingAs(factory(User::class)->create());
-        
+
         $thread = factory(Thread::class)->make();
-        
+
         $this->post('/threads', $thread->toArray())
         // ->assertStatus(302)
         ->assertRedirect('/email/verify');
