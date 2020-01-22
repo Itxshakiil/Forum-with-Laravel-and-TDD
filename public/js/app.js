@@ -3460,6 +3460,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3714,15 +3715,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["initialRepliesCount"],
+  props: ["thread"],
   components: {
     Replies: _components_Replies_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     subscribeButton: _components_SubscribeButton__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
-      repliesCount: this.initialRepliesCount
+      repliesCount: this.thread.replies_count,
+      locked: this.thread.locked
     };
+  },
+  methods: {
+    toggleLock: function toggleLock() {
+      axios[this.locked ? 'delete' : 'post']('/locked-threads/' + this.thread.slug);
+      this.locked = !this.locked;
+    }
   }
 });
 
@@ -53603,7 +53611,11 @@ var render = function() {
         on: { changed: _vm.fetch }
       }),
       _vm._v(" "),
-      _c("new-reply", { on: { created: _vm.add } })
+      _vm.$parent.locked
+        ? _c("div", [
+            _vm._v("This thread is locked. No more replies are allowed.")
+          ])
+        : _c("new-reply", { on: { created: _vm.add } })
     ],
     2
   )
@@ -66053,15 +66065,12 @@ var app = new Vue({
 
 var user = window.App.user;
 module.exports = {
-  // updateReply(reply) {
-  //     return reply.user_id === user.id
-  // },
-  // updateThread(thread) {
-  //     return thread.user_id === user.id
-  // },
   owns: function owns(model) {
     var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
     return model[prop] == user.id;
+  },
+  isAdmin: function isAdmin() {
+    return ['JohnDoe', 'JaneDoe'].includes(user.name);
   }
 };
 

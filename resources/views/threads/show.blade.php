@@ -4,7 +4,7 @@
 <link href="{{ asset('css/vendor/jquery.atwho.min.css') }}" rel="stylesheet">
 @endsection
 @section('content')
-<thread-view :initial-replies-count="{{$thread->replies_count}}" inline-template>
+<thread-view :thread="{{$thread}}" inline-template>
     <div class="container mx-auto">
         <div class="flex justify-center px-6 my-12">
             <div class="flex flex-col w-full md:w-2/3 bg-white p-5 rounded-lg lg:rounded">
@@ -41,7 +41,9 @@
             <div class="ml-2 w-full md:w-1/3 bg-white p-5 rounded-lg lg:rounded">
                 This thread was published {{$thread->created_at->diffForHumans()}} by {{$thread->creator->name}} and has
                 <span v-text="repliesCount "></span> {{ Str::plural('comment',$thread->replies_count)}}.
-                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}"></subscribe-button>
+                <subscribe-button :active="{{json_encode($thread->isSubscribedTo)}}" v-if="signedIn"></subscribe-button>
+                <button class="w-full px-4 py-2 mt-2 font-bold bg-gray-600 text-white rounded-full focus:outline-none"
+                    v-if="authorize('isAdmin')" @click="toggleLock" v-text="locked ? 'Unlock' : 'Lock'"></button>
             </div>
         </div>
     </div>

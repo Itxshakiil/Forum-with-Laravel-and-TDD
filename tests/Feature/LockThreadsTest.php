@@ -23,7 +23,7 @@ class LockThreadsTest extends TestCase
 
         $this->post(route('locked-threads.store', $thread))->assertStatus(403);
 
-        $this->assertFalse(!!$thread->fresh()->locked);
+        $this->assertFalse($thread->fresh()->locked);
     }
 
     /**
@@ -37,7 +37,21 @@ class LockThreadsTest extends TestCase
 
         $this->post(route('locked-threads.store', $thread));
 
-        $this->assertTrue(!!$thread->fresh()->locked);
+        $this->assertTrue($thread->fresh()->locked);
+    }
+
+    /**
+    * @test
+    */
+    public function an_adminsitrator_may_unlock_threads()
+    {
+        $this->actingAs(factory(User::class)->create(['name' => 'JohnDoe']));
+
+        $thread = factory(Thread::class)->create(['user_id' => auth()->id(), 'locked' => true]);
+
+        $this->delete(route('locked-threads.destroy', $thread));
+
+        $this->assertFalse($thread->fresh()->locked);
     }
 
     /**
@@ -47,9 +61,7 @@ class LockThreadsTest extends TestCase
     {
         $this->actingAs(factory(User::class)->create());
 
-        $thread = factory(Thread::class)->create();
-
-        $thread->lock();
+        $thread = factory(Thread::class)->create(['locked' => true]);
 
         $this->post($thread->path() . '/replies', [
             'body' => 'Foobar',
