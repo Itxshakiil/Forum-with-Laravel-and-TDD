@@ -5,10 +5,11 @@ namespace App;
 use App\Providers\ThreadRecievedNewReply;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class Thread extends Model
 {
-    use RecordActivity;
+    use RecordActivity,Searchable;
     /**
      * Don't auto-apply mass assignment protection.
      *

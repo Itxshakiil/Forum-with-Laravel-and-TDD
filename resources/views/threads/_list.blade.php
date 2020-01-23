@@ -1,4 +1,4 @@
-@foreach ($threads as $thread)
+@forelse ($threads as $thread)
 <article class="border p-4 mb-2 rounded">
     <div class="flex justify-between">
         <div class="flex flex-col">
@@ -22,4 +22,6 @@
     <hr>
     <p>{{$thread->visits}} Visits</p>
 </article>
-@endforeach
+@empty
+<p class="p-2">No Threads Found</p>
+@endforelse
