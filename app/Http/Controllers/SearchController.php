@@ -15,6 +15,6 @@ class SearchController extends Controller
         if (request()->wantsJson()) {
             return $threads;
         }
-        return view('threads.index', compact('threads'));
+        return view('threads.search');
     }
 }
