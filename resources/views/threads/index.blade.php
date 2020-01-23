@@ -2,6 +2,7 @@
 @section('title','All Threads')
 @section('content')
 <div class="container mx-auto">
+    
     <div class="flex justify-center px-6 my-12">
         <div class="w-full md:w-9/12 bg-white p-5 rounded-lg lg:rounded-l-none">
             <h3 class="p-4 text-2xl text-center">Threads!</h3>
@@ -11,7 +12,7 @@
         </div>
         <div class="w-full md:w-3/12 bg-white p-2 rounded-lg lg:rounded-l-none ml-2">
             <h3 class="p-4 text-2xl text-center">Search!</h3>
-            
+
             <form class="px-8 pt-6 mb-4 bg-white rounded" method="GET" action="{{ route('search') }}">
                 <div class="mb-4">
                     <input
