@@ -10,8 +10,8 @@
                 @endif
             </a>
             <h4 class="text-sm">Posted By:
-                <a href="{{route('profile.show',$thread->creator->name)}}"
-                    class="text-blue-500">{{$thread->creator->name}}
+                <a href="{{route('profile.show',$thread->creator->username)}}"
+                    class="text-blue-500">{{$thread->creator->username}}
                 </a>
             </h4>
         </div>

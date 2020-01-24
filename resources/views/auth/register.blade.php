@@ -23,6 +23,18 @@
                     @enderror
                 </div>
                 <div class="mb-4">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="username">
+                        Username
+                    </label>
+                    <input
+                        class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none @error('name') border-red-500 @enderror"
+                        id="username" type="text" placeholder="username" name="username" value="{{ old('username') }}" required
+                        autocomplete="username" min="5" max="12" />
+                    @error('username')
+                    <p class="text-xs italic text-red-500" role="alert">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mb-4">
                     <label class="block mb-2 text-sm font-semibold text-gray-700" for="email">
                         Email Address
                     </label>

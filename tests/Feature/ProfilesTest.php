@@ -18,7 +18,7 @@ class ProfilesTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->get("/profiles/{$user->name}")
+        $this->get("/profiles/{$user->username}")
         ->assertSee($user->name);
     }
 
@@ -33,7 +33,7 @@ class ProfilesTest extends TestCase
             'user_id' => auth()->id()
         ]);
 
-        $this->get('/profiles/' . auth()->user()->name)
+        $this->get('/profiles/' . auth()->user()->username)
         ->assertSee($thread->title)
         ->assertSee($thread->body);
     }
