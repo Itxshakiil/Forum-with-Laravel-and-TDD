@@ -81,7 +81,7 @@ class ReadThreadsTest extends TestCase
     /**
     * @test
     */
-    public function a_user_can_filter_thredas_by_popularity()
+    public function a_user_can_filter_threads_by_popularity()
     {
         $threadWithNoReply = $this->thread;
 
@@ -98,6 +98,28 @@ class ReadThreadsTest extends TestCase
         $response = $this->getJson('/threads?popular=1')->json();
 
         $this->assertEquals([3, 1, 0], array_column($response['data'], 'replies_count'));
+    }
+
+    /**
+    * @test
+    */
+    public function a_user_can_filter_threads_by_visits()
+    {
+        $threadWithNoVisit = $this->thread;
+
+        $threadWithOneVisit = factory(Thread::class)->create();
+
+        $this->get($threadWithOneVisit->path());
+
+        $threadWithThreeVisit = factory(Thread::class)->create();
+
+        $this->get($threadWithThreeVisit->path());
+        $this->get($threadWithThreeVisit->path());
+        $this->get($threadWithThreeVisit->path());
+
+        $response = $this->getJson('/threads?most_visited=1')->json();
+
+        $this->assertEquals([3, 1, 0], array_column($response['data'], 'visits'));
     }
 
     /**

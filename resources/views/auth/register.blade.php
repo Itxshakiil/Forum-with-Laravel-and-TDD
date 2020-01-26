@@ -35,7 +35,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label class="block mb-2 text-sm font-semibold text-gray-700" for="email">
+                    <label class="block mb-2 text-sm font-bold text-gray-700" for="email">
                         Email Address
                     </label>
                     <input

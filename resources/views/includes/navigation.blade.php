@@ -14,6 +14,8 @@
                             <a class="ml-4"
                                 href="{{ route('threads.index') }}?popular=1">{{ __('Popular Threads') }}</a>
                             <a class="ml-4"
+                                href="{{ route('threads.index') }}?most_visited=1">{{ __('Most Visited Threads') }}</a>
+                            <a class="ml-4"
                                 href="{{ route('threads.index') }}?unanswer=1">{{ __('Unanswered Threads') }}</a>
                             @auth
                             <a class="ml-4"
